@@ -1,0 +1,34 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "CrediYaAuthentication"
+  devtools:
+    add-properties: false
+  profiles:
+    include: null
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
+
+adapters:
+    r2dbc:
+      host: "localhost"
+      port: 5432
+      database: "mi_base"
+      schema: "public"
+      username: "admin"
+      password: "admin123"
+logging:
+  level:
+    root: INFO
+    co.com.crediyaauthentication: TRACE
+    org.springframework.r2dbc: DEBUG

@@ -1,0 +1,16 @@
+@transactional
+    public Mono<ServerResponse> createUser(ServerRequest request) {
+        return request.bodyToMono(UsuarioRequestDTO.class)
+                .flatMap(dto -> {
+                    Set<ConstraintViolation<UsuarioRequestDTO>> violations = validator.validate(dto);
+                    if (!violations.isEmpty()) {
+                        return Mono.error(new ConstraintViolationException(violations));
+                    }
+                    return Mono.just(dto);
+                })
+                .map(mapper::toEntity)
+                .flatMap(userUsecase::createUser)
+                .map(mapper::toDto)
+                .flatMap(ServerResponse.ok()::bodyValue)
+                .onErrorResume(errorHandler::handle);
+    }
