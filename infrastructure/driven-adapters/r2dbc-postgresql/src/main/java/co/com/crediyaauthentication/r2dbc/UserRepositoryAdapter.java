@@ -1,6 +1,5 @@
 package co.com.crediyaauthentication.r2dbc;
 
-import co.com.crediyaauthentication.model.user.Email;
 import co.com.crediyaauthentication.model.user.Exceptions.BusinessException;
 import co.com.crediyaauthentication.model.user.User;
 import co.com.crediyaauthentication.model.user.gateways.UserRepository;

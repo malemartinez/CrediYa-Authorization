@@ -19,12 +19,12 @@ public class Handler {
   private  final UserMapper userMapper;
 
     public Mono<ServerResponse> listenSaveUser(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(UserDto.class)   // JSON → DTO
-                .map(userMapper::toDomain)                     // DTO → Dominio
-                .flatMap(useCase::saveUser)                    // Caso de uso devuelve User (dominio)
-                .map(userMapper::toResponse)                   // Dominio → DTO de salida
+        return serverRequest.bodyToMono(UserDto.class)
+                .map(userMapper::toDomain)
+                .flatMap(useCase::saveUser)
+                .map(userMapper::toResponse)
                 .flatMap(savedUserDTO -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(savedUserDTO));             // JSON final limpio
+                        .bodyValue(savedUserDTO));
     }
 }

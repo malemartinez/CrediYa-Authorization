@@ -1,7 +1,16 @@
 package co.com.crediyaauthentication.model.user.Exceptions;
 
+import java.util.Set;
+
 public class ValidationException extends RuntimeException {
-    public ValidationException(String message) {
-        super(message);
+    private final Set<String> errors;
+
+    public ValidationException(Set<String> errors) {
+        super("Errores de validación");
+        this.errors = errors;
+    }
+
+    public Set<String> getErrors() {
+        return errors;
     }
 }

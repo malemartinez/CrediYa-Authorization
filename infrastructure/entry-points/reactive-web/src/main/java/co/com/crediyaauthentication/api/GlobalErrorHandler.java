@@ -37,10 +37,12 @@ public class GlobalErrorHandler extends AbstractErrorWebExceptionHandler {
 
         Throwable error = getError(request);
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        Object messages = error.getMessage();
 
         log.error("Error procesando request {}: {}", request.path(), error.getMessage(), error);
-        if (error instanceof ValidationException) {
+        if (error instanceof ValidationException ve) {
             status = HttpStatus.BAD_REQUEST;
+            messages = ve.getErrors();
         } else if (error instanceof BusinessException) {
             status = HttpStatus.CONFLICT;
         }
@@ -50,7 +52,7 @@ public class GlobalErrorHandler extends AbstractErrorWebExceptionHandler {
                 .bodyValue(Map.of(
                         "status", status.value(),
                         "error", status.getReasonPhrase(),
-                        "message", error.getMessage(),
+                        "message", messages,
                         "path", request.path()
                 ));
     }
