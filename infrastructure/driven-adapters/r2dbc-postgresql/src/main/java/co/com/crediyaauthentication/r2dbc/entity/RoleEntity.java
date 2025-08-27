@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Getter
 @Setter
 @Builder
-public class RolEntity {
+public class RoleEntity {
 
     @Id
     private Long id;

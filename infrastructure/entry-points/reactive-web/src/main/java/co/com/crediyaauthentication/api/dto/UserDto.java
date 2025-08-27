@@ -1,7 +1,7 @@
 package co.com.crediyaauthentication.api.dto;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -42,7 +42,7 @@ public record UserDto(
         Long idRole,
 
         @Schema(description = "Fecha de nacimiento", example = "01-07-1997")
-        Date birthday,
+        LocalDate birthday,
 
         @Schema(description = "Dirección válida", example = "cr 5 #8-9")
         String address

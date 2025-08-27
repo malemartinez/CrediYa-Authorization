@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -21,7 +22,7 @@ public class User {
     private String phone;
     private Double baseSalary;
     private Long idRole;
-    private Date birthday;
+    private LocalDate birthday;
     private String address;
 }
 

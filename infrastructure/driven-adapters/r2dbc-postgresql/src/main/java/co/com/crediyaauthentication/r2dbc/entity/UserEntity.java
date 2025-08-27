@@ -5,7 +5,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Table("users")
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class UserEntity {
     private String name;
     private String lastname;
     private String email;
-    private Date birthday;
+    private LocalDate birthday;
     private String address;
     private String phone;
 
