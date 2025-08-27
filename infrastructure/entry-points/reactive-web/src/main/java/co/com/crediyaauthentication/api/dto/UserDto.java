@@ -46,4 +46,5 @@ public record UserDto(
 
         @Schema(description = "Dirección válida", example = "cr 5 #8-9")
         String address
-) {}
+) {
+}
