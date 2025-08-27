@@ -5,18 +5,20 @@ import co.com.crediyaauthentication.model.user.Exceptions.BusinessException;
 import co.com.crediyaauthentication.model.user.Exceptions.ValidationException;
 import co.com.crediyaauthentication.model.user.User;
 import co.com.crediyaauthentication.model.user.UserValidator;
+import co.com.crediyaauthentication.model.user.gateways.UserCasePort;
 import co.com.crediyaauthentication.model.user.gateways.UserRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 
 @RequiredArgsConstructor
-public class UserUseCase {
+public class UserUseCase implements UserCasePort {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserValidator userValidator;
 
+    @Override
     public Mono<User> saveUser(User user) {
 
         return Mono.fromCallable(() -> {

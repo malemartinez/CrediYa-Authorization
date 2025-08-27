@@ -3,7 +3,7 @@ package co.com.crediyaauthentication.api;
 import co.com.crediyaauthentication.api.dto.UserDto;
 import co.com.crediyaauthentication.api.mapper.UserMapper;
 import co.com.crediyaauthentication.model.user.User;
-import co.com.crediyaauthentication.usecase.user.UserUseCase;
+import co.com.crediyaauthentication.model.user.gateways.UserCasePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class Handler {
 
-  private  final UserUseCase useCase;
+  private  final UserCasePort useCase;
   private  final UserMapper userMapper;
 
     public Mono<ServerResponse> listenSaveUser(ServerRequest serverRequest) {
