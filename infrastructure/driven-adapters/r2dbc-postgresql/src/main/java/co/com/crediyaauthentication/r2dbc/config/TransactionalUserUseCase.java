@@ -16,4 +16,10 @@ public class TransactionalUserUseCase implements UserCasePort {
         return delegate.saveUser(user)
                 .as(operator::transactional);
     }
+
+    @Override
+    public Mono<User> getUserByDocument(String documentNumber) {
+        return delegate.getUserByDocument(documentNumber)
+                .as(operator::transactional);
+    }
 }
