@@ -25,13 +25,13 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Mono<User> save(User user) {
-        log.trace("Iniciando guardado del usuario: {}", user);
+        log.trace("[UserRepositoryAdapter] Iniciando guardado del usuario: {}", user);
         return super.save(user)
-                .doOnSuccess(u -> log.trace("Usuario guardado exitosamente: {}", u))
-                .doOnError(e -> log.error("Error al guardar usuario: {}", e.getMessage(), e))
+                .doOnSuccess(u -> log.trace("[UserRepositoryAdapter] Usuario guardado exitosamente: {}", u))
+                .doOnError(e -> log.error("[UserRepositoryAdapter] Error al guardar usuario: {}", e.getMessage(), e))
                 .onErrorMap(org.springframework.dao.DataIntegrityViolationException.class,
                         ex ->  {
-                            log.warn("Violación de integridad al guardar usuario [{}]: {}", user, ex.getMessage());
+                            log.warn("[UserRepositoryAdapter] Violación de integridad al guardar usuario [{}]: {}", user, ex.getMessage());
                             return new BusinessException("Violacion de datos para guardado del usuario");
                         } );
 
@@ -39,33 +39,33 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Mono<User> findByEmail(String email) {
-        log.trace("Buscando usuario por email: {}", email);
+        log.trace("[UserRepositoryAdapter] Buscando usuario por email: {}", email);
         return repository.findByEmail(email)
                 .map(entity -> mapper.map(entity, User.class))
                 .doOnSuccess(u -> {
                     if (u != null) {
-                        log.trace("Usuario encontrado por email {}: {}", email, u);
+                        log.trace("[UserRepositoryAdapter] Usuario encontrado por email {}: {}", email, u);
                     } else {
-                        log.trace("No se encontró usuario con email: {}", email);
+                        log.trace("[UserRepositoryAdapter] No se encontró usuario con email: {}", email);
                     }
                 })
-                .doOnError(e -> log.error("Error al buscar usuario por email {}: {}", email, e.getMessage(), e));
+                .doOnError(e -> log.error("[UserRepositoryAdapter] Error al buscar usuario por email {}: {}", email, e.getMessage(), e));
 
     }
 
     @Override
     public Mono<User> findByDocumentIdentification(String documentIdentification) {
-        log.trace("Buscando usuario por identificacion: {}", documentIdentification);
+        log.trace("[UserRepositoryAdapter] Buscando usuario por identificacion: {}", documentIdentification);
         return repository.findByDocumentIdentification(documentIdentification)
                 .map(entity -> mapper.map(entity, User.class))
                 .doOnSuccess(u -> {
                     if (u != null) {
-                        log.trace("Usuario encontrado con identificacion {}: {}", documentIdentification, u);
+                        log.trace(" [UserRepositoryAdapter] Usuario encontrado con identificacion {}: {}", documentIdentification, u);
                     } else {
-                        log.trace("No se encontró usuario con identificacion: {}", documentIdentification);
+                        log.trace("[UserRepositoryAdapter] No se encontró usuario con identificacion: {}", documentIdentification);
                     }
                 })
-                .doOnError(e -> log.error("Error al buscar usuario por identificacion {}: {}", documentIdentification, e.getMessage(), e));
+                .doOnError(e -> log.error("[UserRepositoryAdapter] Error al buscar usuario por identificacion {}: {}", documentIdentification, e.getMessage(), e));
 
     }
 }
