@@ -1,4 +1,4 @@
-package co.com.crediyaauthentication.model.user.Exceptions;
+package co.com.crediyaauthentication.model.Exceptions;
 
 import java.util.Set;
 

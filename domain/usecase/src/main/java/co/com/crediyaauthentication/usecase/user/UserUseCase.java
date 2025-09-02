@@ -1,8 +1,8 @@
 package co.com.crediyaauthentication.usecase.user;
 
 import co.com.crediyaauthentication.model.role.gateways.RoleRepository;
-import co.com.crediyaauthentication.model.user.Exceptions.BusinessException;
-import co.com.crediyaauthentication.model.user.Exceptions.ValidationException;
+import co.com.crediyaauthentication.model.Exceptions.BusinessException;
+import co.com.crediyaauthentication.model.Exceptions.ValidationException;
 import co.com.crediyaauthentication.model.user.User;
 import co.com.crediyaauthentication.model.user.UserValidator;
 import co.com.crediyaauthentication.model.user.gateways.UserCasePort;

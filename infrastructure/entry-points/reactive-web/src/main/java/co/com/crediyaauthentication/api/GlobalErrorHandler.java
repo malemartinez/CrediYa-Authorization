@@ -1,7 +1,7 @@
 package co.com.crediyaauthentication.api;
 
-import co.com.crediyaauthentication.model.user.Exceptions.BusinessException;
-import co.com.crediyaauthentication.model.user.Exceptions.ValidationException;
+import co.com.crediyaauthentication.model.Exceptions.BusinessException;
+import co.com.crediyaauthentication.model.Exceptions.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
