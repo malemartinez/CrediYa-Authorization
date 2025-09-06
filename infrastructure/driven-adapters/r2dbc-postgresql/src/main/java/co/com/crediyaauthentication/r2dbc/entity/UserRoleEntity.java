@@ -1,18 +1,15 @@
 package co.com.crediyaauthentication.r2dbc.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("roles")
+@Table("user_roles")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class RoleEntity {
-
-    @Id
-    private Long id;
-    private String name;
+public class UserRoleEntity {
+    private Long userId;
+    private Long roleId;
 }

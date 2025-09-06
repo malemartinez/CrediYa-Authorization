@@ -2,6 +2,7 @@ package co.com.crediyaauthentication.api.dto;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -26,8 +27,8 @@ public record UserDto(
         @Schema(description = "Salario base del usuario", example = "3500000")
         String baseSalary,
 
-        @Schema(description = "Rol obligatorio", example = "1")
-        Long idRole,
+        @Schema(description = "Lista de roles obligatoria", example = "[1, 2]")
+        List<Long> roles,
 
         @Schema(description = "Fecha de nacimiento", example = "01-07-1997")
         LocalDate birthday,
