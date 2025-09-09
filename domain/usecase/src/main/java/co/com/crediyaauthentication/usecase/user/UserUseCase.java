@@ -1,10 +1,12 @@
 package co.com.crediyaauthentication.usecase.user;
 
 import co.com.crediyaauthentication.model.helpers.PasswordEncoderPort;
+import co.com.crediyaauthentication.model.auth.LogIn;
 import co.com.crediyaauthentication.model.role.Role;
 import co.com.crediyaauthentication.model.role.gateways.RoleRepository;
 import co.com.crediyaauthentication.model.Exceptions.BusinessException;
 import co.com.crediyaauthentication.model.Exceptions.ValidationException;
+import co.com.crediyaauthentication.model.auth.Token;
 import co.com.crediyaauthentication.model.user.User;
 import co.com.crediyaauthentication.model.user.UserValidator;
 import co.com.crediyaauthentication.model.user.gateways.UserCasePort;
@@ -45,6 +47,11 @@ public class UserUseCase implements UserCasePort {
     @Override
     public Mono<User> getUserByDocument(String documentNumber) {
         return userRepository.findByDocumentIdentification(documentNumber);
+    }
+
+    @Override
+    public Mono<Token> logIn(LogIn logIn) {
+        return userRepository.login(logIn);
     }
 
     private Mono<User> validateEmail(User u){

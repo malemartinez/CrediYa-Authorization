@@ -28,7 +28,7 @@ public record UserDto(
         String baseSalary,
 
         @Schema(description = "Lista de roles obligatoria", example = "[1, 2]")
-        List<Long> roles,
+        List<String> roles,
 
         @Schema(description = "Fecha de nacimiento", example = "01-07-1997")
         LocalDate birthday,

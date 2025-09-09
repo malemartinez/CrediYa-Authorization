@@ -26,18 +26,18 @@ public interface UserMapper {
    UserDto toResponse(User user);
 
     @Named("mapRoleIds")
-    default Set<Role> mapRoleIds(List<Long> roleIds) {
+    default Set<Role> mapRoleIds(List<String> roleIds) {
         if (roleIds == null) return new HashSet<>();
         return roleIds.stream()
-                .map(id -> new Role(id, null))
+                .map(id -> new Role(Long.parseLong(id), null))
                 .collect(Collectors.toSet());
     }
 
     @Named("mapRoleEntitiesToIds")
-    default List<Long> mapRoleEntitiesToIds(Set<Role> roles) {
+    default List<String> mapRoleEntitiesToIds(Set<Role> roles) {
         if (roles == null) return List.of();
         return roles.stream()
-                .map(Role::getId)
+                .map(Role::getName)
                 .toList();
     }
 }

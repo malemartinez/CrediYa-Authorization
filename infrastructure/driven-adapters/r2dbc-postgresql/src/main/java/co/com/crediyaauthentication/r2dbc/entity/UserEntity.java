@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Table("users")
 @AllArgsConstructor
@@ -17,7 +18,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Builder
-public class UserEntity {
+public class UserEntity implements UserDetails {
 
     @Id
     @Column("id_usuario")
@@ -37,5 +38,13 @@ public class UserEntity {
     private Double baseSalary;
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 
+    @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
 }
