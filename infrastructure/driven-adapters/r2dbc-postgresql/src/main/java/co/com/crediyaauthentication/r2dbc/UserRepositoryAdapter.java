@@ -1,6 +1,7 @@
 package co.com.crediyaauthentication.r2dbc;
 
 import co.com.crediyaauthentication.model.Exceptions.BusinessException;
+import co.com.crediyaauthentication.model.auth.gateways.AuthRepository;
 import co.com.crediyaauthentication.model.helpers.PasswordEncoderPort;
 import co.com.crediyaauthentication.model.auth.LogIn;
 import co.com.crediyaauthentication.model.role.Role;
@@ -28,7 +29,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
         UserEntity,
         Long,
         UserReactiveRepository
-> implements UserRepository {
+> implements UserRepository , AuthRepository {
 
     private final UserRoleReactiveRepository userRoleRepository;
     private final RoleReactiveRepository roleRepository;
@@ -66,13 +67,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
         log.trace("[UserRepositoryAdapter] Buscando usuario por email: {}", email);
 
         return repository.findByEmail(email)
-                .flatMap(userEntity ->
-                        userRoleRepository.findByUserId(userEntity.getId())
-                                .map(UserRoleEntity::getRoleId)
-                                .collectList()
-                                .flatMap(roleIds -> roleRepository.findAllByIdIn(roleIds).collectList())
-                                .map(roleEntities -> mapRolesToUser(roleEntities, userEntity))
-                )
+                .flatMap(this::findRolesToUser)
                 .doOnSuccess(u -> {
                     if (u != null) {
                         log.trace("[UserRepositoryAdapter] Usuario encontrado por email {}: {}", email, u);
@@ -87,7 +82,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<User> findByDocumentIdentification(String documentIdentification) {
         log.trace("[UserRepositoryAdapter] Buscando usuario por identificacion: {}", documentIdentification);
         return repository.findByDocumentIdentification(documentIdentification)
-                .map(entity -> mapper.map(entity, User.class))//TODO: MODIFICAR EL MAPPER PARA DEVOLVER LA CONTRASEÑA CON ENCODER
+                .flatMap(this::findRolesToUser)//TODO: MODIFICAR EL MAPPER PARA DEVOLVER LA CONTRASEÑA CON ENCODER
                 .doOnSuccess(u -> {
                     if (u != null) {
                         log.trace(" [UserRepositoryAdapter] Usuario encontrado con identificacion {}: {}", documentIdentification, u);
@@ -99,12 +94,23 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
     }
 
-    @Override
-    public Mono<Token> login(LogIn dto) {
-        return repository.findByEmail(dto.getEmail())
-                .filter(userDocument -> passwordEncoderPort.matches(dto.getPassword(), userDocument.getPassword()))
-                .map(userDocument -> new Token(jwtService.generateToken(userDocument)))
-                .switchIfEmpty(Mono.error(new BusinessException("Credenciales incorrectos")));
+
+//    public Mono<Token> login(LogIn dto) {
+//        return repository.findByEmail(dto.getEmail())
+//                .filter(userDocument -> passwordEncoderPort.matches(dto.getPassword(), userDocument.getPassword()))
+//                .flatMap(userEntity ->
+//                        userRoleRepository.findRoleIdsByUserId(userEntity.getId())
+//                                .flatMap(roleRepository::findById)
+//                                .map(RoleEntity::getName)
+//                                .collectList()
+//                                .map(roles -> new SecurityUser(userEntity, roles))
+//                .map(userDocument -> new Token(jwtService.generateToken(userDocument)))
+//                .switchIfEmpty(Mono.error(new BusinessException("Credenciales incorrectos"))));
+//    }
+
+    public Flux<Long> getRoleIdsByUserId(User user){
+        UserEntity userEntity = mapper.map(user, UserEntity.class);
+       return userRoleRepository.findRoleIdsByUserId(userEntity.getId());
     }
 
     private Mono<User> saveRoles(UserEntity u, User user){
@@ -119,6 +125,14 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
                     domainUser.setRoles(new HashSet<>(roles));
                     return domainUser;
                 });
+    }
+
+    private Mono<User> findRolesToUser(UserEntity userEntity){
+        return userRoleRepository.findByUserId(userEntity.getId())
+                .map(UserRoleEntity::getRoleId)
+                .collectList()
+                .flatMap(roleIds -> roleRepository.findAllByIdIn(roleIds).collectList())
+                .map(roleEntities -> mapRolesToUser(roleEntities, userEntity));
     }
 
     private User mapRolesToUser(List<RoleEntity> roleEntities, UserEntity userEntity){

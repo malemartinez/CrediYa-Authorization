@@ -49,10 +49,7 @@ public class UserUseCase implements UserCasePort {
         return userRepository.findByDocumentIdentification(documentNumber);
     }
 
-    @Override
-    public Mono<Token> logIn(LogIn logIn) {
-        return userRepository.login(logIn);
-    }
+
 
     private Mono<User> validateEmail(User u){
         return userRepository.findByEmail(u.getEmail())

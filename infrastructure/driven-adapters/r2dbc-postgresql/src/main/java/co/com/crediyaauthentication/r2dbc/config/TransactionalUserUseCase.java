@@ -25,9 +25,9 @@ public class TransactionalUserUseCase implements UserCasePort {
                 .as(operator::transactional);
     }
 
-    @Override
-    public Mono<Token> logIn(LogIn logIn) {
-        return delegate.logIn(logIn)
-                .as(operator::transactional);
-    }
+//    @Override
+//    public Mono<Token> logIn(LogIn logIn) {
+//        return delegate.logIn(logIn)
+//                .as(operator::transactional);
+//    }
 }

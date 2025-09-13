@@ -8,6 +8,7 @@ import co.com.crediyaauthentication.model.user.gateways.UserRepository;
 import co.com.crediyaauthentication.usecase.user.UserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
@@ -20,6 +21,7 @@ public class R2dbcReactiveConfig {
     }
 
     @Bean
+    @Primary
     public UserCasePort userCasePort(UserRepository userRepository,
                                      RoleRepository roleRepository,
                                      UserValidator userValidator,

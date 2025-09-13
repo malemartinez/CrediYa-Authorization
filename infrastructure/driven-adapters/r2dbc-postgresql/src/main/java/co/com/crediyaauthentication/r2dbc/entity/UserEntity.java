@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class UserEntity implements UserDetails {
+public class UserEntity {
 
     @Id
     @Column("id_usuario")
@@ -37,14 +37,4 @@ public class UserEntity implements UserDetails {
     @Column("base_salary")
     private Double baseSalary;
 
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
-    @Override
-    public String getUsername() {
-        return this.getEmail();
-    }
 }
