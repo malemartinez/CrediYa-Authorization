@@ -2,17 +2,13 @@ package co.com.crediyaauthentication.r2dbc;
 
 import co.com.crediyaauthentication.model.Exceptions.BusinessException;
 import co.com.crediyaauthentication.model.auth.gateways.AuthRepository;
-import co.com.crediyaauthentication.model.helpers.PasswordEncoderPort;
-import co.com.crediyaauthentication.model.auth.LogIn;
 import co.com.crediyaauthentication.model.role.Role;
-import co.com.crediyaauthentication.model.auth.Token;
 import co.com.crediyaauthentication.model.user.User;
 import co.com.crediyaauthentication.model.user.gateways.UserRepository;
 import co.com.crediyaauthentication.r2dbc.entity.RoleEntity;
 import co.com.crediyaauthentication.r2dbc.entity.UserEntity;
 import co.com.crediyaauthentication.r2dbc.entity.UserRoleEntity;
 import co.com.crediyaauthentication.r2dbc.helper.ReactiveAdapterOperations;
-import co.com.crediyaauthentication.r2dbc.security.jwt.JwtService;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
@@ -33,17 +29,14 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
     private final UserRoleReactiveRepository userRoleRepository;
     private final RoleReactiveRepository roleRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoderPort passwordEncoderPort;
+
 
     public UserRepositoryAdapter(UserReactiveRepository repository,
                                  ObjectMapper mapper, UserRoleReactiveRepository userRoleRepository,
-                                 RoleReactiveRepository roleRepository, JwtService jwtService, PasswordEncoderPort passwordEncoderPort) {
+                                 RoleReactiveRepository roleRepository) {
         super(repository, mapper, d -> mapper.map(d, User.class));
         this.userRoleRepository = userRoleRepository;
         this.roleRepository = roleRepository;
-        this.jwtService = jwtService;
-        this.passwordEncoderPort = passwordEncoderPort;
     }
 
     @Override
@@ -94,19 +87,6 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
     }
 
-
-//    public Mono<Token> login(LogIn dto) {
-//        return repository.findByEmail(dto.getEmail())
-//                .filter(userDocument -> passwordEncoderPort.matches(dto.getPassword(), userDocument.getPassword()))
-//                .flatMap(userEntity ->
-//                        userRoleRepository.findRoleIdsByUserId(userEntity.getId())
-//                                .flatMap(roleRepository::findById)
-//                                .map(RoleEntity::getName)
-//                                .collectList()
-//                                .map(roles -> new SecurityUser(userEntity, roles))
-//                .map(userDocument -> new Token(jwtService.generateToken(userDocument)))
-//                .switchIfEmpty(Mono.error(new BusinessException("Credenciales incorrectos"))));
-//    }
 
     public Flux<Long> getRoleIdsByUserId(User user){
         UserEntity userEntity = mapper.map(user, UserEntity.class);
