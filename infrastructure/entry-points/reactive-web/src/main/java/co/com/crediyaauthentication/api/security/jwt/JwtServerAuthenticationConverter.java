@@ -1,4 +1,4 @@
-package co.com.crediyaauthentication.r2dbc.security.jwt;
+package co.com.crediyaauthentication.api.security.jwt;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

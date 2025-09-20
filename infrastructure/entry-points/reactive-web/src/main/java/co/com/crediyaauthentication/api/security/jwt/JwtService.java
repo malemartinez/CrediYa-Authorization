@@ -1,4 +1,4 @@
-package co.com.crediyaauthentication.r2dbc.security.jwt;
+package co.com.crediyaauthentication.api.security.jwt;
 
 import co.com.crediyaauthentication.model.auth.gateways.TokenProviderPort;
 import io.jsonwebtoken.Claims;

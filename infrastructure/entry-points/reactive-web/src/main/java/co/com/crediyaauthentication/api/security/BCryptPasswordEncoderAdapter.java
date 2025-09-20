@@ -1,4 +1,4 @@
-package co.com.crediyaauthentication.r2dbc.security;
+package co.com.crediyaauthentication.api.security;
 
 import co.com.crediyaauthentication.model.helpers.PasswordEncoderPort;
 import lombok.RequiredArgsConstructor;
