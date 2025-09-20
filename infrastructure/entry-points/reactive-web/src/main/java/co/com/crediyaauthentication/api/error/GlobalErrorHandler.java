@@ -1,4 +1,4 @@
-package co.com.crediyaauthentication.api;
+package co.com.crediyaauthentication.api.error;
 
 import co.com.crediyaauthentication.model.Exceptions.BusinessException;
 import co.com.crediyaauthentication.model.Exceptions.ValidationException;
@@ -47,13 +47,15 @@ public class GlobalErrorHandler extends AbstractErrorWebExceptionHandler {
             status = HttpStatus.CONFLICT;
         }
 
+        ApiErrorResponse response = new ApiErrorResponse(
+                status.value(),
+                status.getReasonPhrase(),
+                messages,
+                request.path()
+        );
+
         return ServerResponse.status(status)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(Map.of(
-                        "status", status.value(),
-                        "error", status.getReasonPhrase(),
-                        "message", messages,
-                        "path", request.path()
-                ));
+                .bodyValue(response);
     }
 }
