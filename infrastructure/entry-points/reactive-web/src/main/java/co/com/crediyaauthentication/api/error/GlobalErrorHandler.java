@@ -2,6 +2,7 @@ package co.com.crediyaauthentication.api.error;
 
 import co.com.crediyaauthentication.model.Exceptions.BusinessException;
 import co.com.crediyaauthentication.model.Exceptions.ValidationException;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
@@ -45,6 +46,10 @@ public class GlobalErrorHandler extends AbstractErrorWebExceptionHandler {
             messages = ve.getErrors();
         } else if (error instanceof BusinessException) {
             status = HttpStatus.CONFLICT;
+        } else if (error instanceof JwtException
+                || error instanceof IllegalArgumentException) {
+            status = HttpStatus.UNAUTHORIZED;
+            messages = "Token inválido, expirado o malformado";
         }
 
         ApiErrorResponse response = new ApiErrorResponse(
