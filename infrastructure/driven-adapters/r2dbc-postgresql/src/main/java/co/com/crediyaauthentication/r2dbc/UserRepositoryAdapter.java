@@ -45,6 +45,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
         return repository.save(mapper.map(user,UserEntity.class))
                 .flatMap(userEntity -> saveRoles(userEntity, user))
+                .flatMap(this::findRolesToUser)
                 .doOnSuccess(u -> log.trace("[UserRepositoryAdapter]  Usuario guardado con roles exitosamente: {}", u))
                 .doOnError(e -> log.error("[UserRepositoryAdapter] Error al guardar usuario: {}", e.getMessage(), e))
                 .onErrorMap(org.springframework.dao.DataIntegrityViolationException.class,
@@ -80,6 +81,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
                     if (u != null) {
                         log.trace(" [UserRepositoryAdapter] Usuario encontrado con identificacion {}: {}", documentIdentification, u);
                     } else {
+                        //TODO: MAPEAR ERROR 404 NOT FOUND
                         log.trace("[UserRepositoryAdapter] No se encontró usuario con identificacion: {}", documentIdentification);
                     }
                 })
@@ -89,22 +91,20 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
 
 
     public Flux<Long> getRoleIdsByUserId(User user){
-        UserEntity userEntity = mapper.map(user, UserEntity.class);
-       return userRoleRepository.findRoleIdsByUserId(userEntity.getId());
+        return repository.findByDocumentIdentification(user.getDocumentIdentification())
+                .flatMapMany(
+                        userEntity -> userRoleRepository.findRoleIdsByUserId(userEntity.getId())
+                );
+
     }
 
-    private Mono<User> saveRoles(UserEntity u, User user){
+    private Mono<UserEntity> saveRoles(UserEntity u, User user){
         Long userId = u.getId();
 
         return Flux.fromIterable(user.getRoles())
                 .flatMap(role -> userRoleRepository.save(new UserRoleEntity(userId, role.getId())))
-                .thenMany(Flux.fromIterable(user.getRoles()))
-                .collectList()
-                .map(roles -> {
-                    User domainUser = mapper.map(u, User.class);
-                    domainUser.setRoles(new HashSet<>(roles));
-                    return domainUser;
-                });
+                .then(Mono.just(u));
+
     }
 
     private Mono<User> findRolesToUser(UserEntity userEntity){
