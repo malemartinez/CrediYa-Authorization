@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/api/v1/auth/**").permitAll()
-                        .pathMatchers(HttpMethod.POST,"/api/v1/usuarios").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST,"/api/v1/usuarios").hasAnyRole("ADMIN", "ASSESSOR")
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(jwtAuthFilter, SecurityWebFiltersOrder.AUTHENTICATION)
