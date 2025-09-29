@@ -2,7 +2,6 @@ package co.com.crediyaauthentication.api;
 
 import co.com.crediyaauthentication.api.dto.UserDto;
 import co.com.crediyaauthentication.api.mapper.UserMapper;
-import co.com.crediyaauthentication.model.user.User;
 import co.com.crediyaauthentication.model.user.gateways.UserCasePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -26,5 +25,16 @@ public class Handler {
                 .flatMap(savedUserDTO -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(savedUserDTO));
+    }
+    public Mono<ServerResponse> getUserByDocument(ServerRequest serverRequest) {
+        String documentNumber = serverRequest.pathVariable("documentNumber");
+
+        return useCase.getUserByDocument(documentNumber)
+                .map(userMapper::toResponse)
+                .flatMap(userResponse ->
+                        ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(userResponse))
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
 }

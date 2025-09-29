@@ -37,5 +37,11 @@ public class UserUseCase implements UserCasePort {
                 .onErrorResume(ValidationException.class, Mono::error);
     }
 
+    @Override
+    public Mono<User> getUserByDocument(String documentNumber) {
+
+        return userRepository.findByDocumentIdentification(documentNumber);
+    }
+
 
 }

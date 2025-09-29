@@ -2,6 +2,8 @@ package co.com.crediyaauthentication.api;
 
 import co.com.crediyaauthentication.api.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -43,10 +46,37 @@ public class RouterRest {
                                     @ApiResponse(responseCode = "200", description = "Usuario creado"),
                                     @ApiResponse(responseCode = "400", description = "Error de validación")
                             }
-            )       )
+                    )
+            ),
+            @RouterOperation(
+                    path = "/api/v1/usuario/{documentNumber}",
+                    produces = {"application/json"},
+                    method = RequestMethod.GET,
+                    beanClass = Handler.class,
+                    beanMethod = "getUserByDocument",
+                    operation = @Operation(
+                            operationId = "getUserByDocument",
+                            summary = "Obtener usuario por documento",
+                            description = "Devuelve la información de un usuario a partir de su número de documento",
+                            parameters = {
+                                    @Parameter(
+                                            name = "documentNumber",
+                                            description = "Número de documento del usuario",
+                                            required = true,
+                                            in = ParameterIn.PATH,
+                                            schema = @Schema(type = "string", example = "C123456789")
+                                    )
+                            },
+                            responses = {
+                                    @ApiResponse(responseCode = "200", description = "Usuario encontrado",
+                                            content = @Content(schema = @Schema(implementation = UserDto.class))),
+                                    @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
+                            }
+                    )
+            )
     })
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
-        return route(POST("/api/v1/usuarios"), handler::listenSaveUser);
-
+        return route(POST("/api/v1/usuarios"), handler::listenSaveUser)
+                .andRoute(GET("/api/v1/usuario/{documentNumber}"), handler::getUserByDocument);
     }
 }

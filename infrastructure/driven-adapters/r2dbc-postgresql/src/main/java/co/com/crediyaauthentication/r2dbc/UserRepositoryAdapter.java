@@ -17,7 +17,9 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
         Long,
         UserReactiveRepository
 > implements UserRepository{
-    public UserRepositoryAdapter(UserReactiveRepository repository, ObjectMapper mapper) {
+
+    public UserRepositoryAdapter(UserReactiveRepository repository,
+                                 ObjectMapper mapper) {
         super(repository, mapper, d -> mapper.map(d, User.class));
     }
 
@@ -39,6 +41,7 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<User> findByEmail(String email) {
         log.trace("Buscando usuario por email: {}", email);
         return repository.findByEmail(email)
+                .map(entity -> mapper.map(entity, User.class))
                 .doOnSuccess(u -> {
                     if (u != null) {
                         log.trace("Usuario encontrado por email {}: {}", email, u);
@@ -47,6 +50,22 @@ public class UserRepositoryAdapter extends ReactiveAdapterOperations<
                     }
                 })
                 .doOnError(e -> log.error("Error al buscar usuario por email {}: {}", email, e.getMessage(), e));
+
+    }
+
+    @Override
+    public Mono<User> findByDocumentIdentification(String documentIdentification) {
+        log.trace("Buscando usuario por identificacion: {}", documentIdentification);
+        return repository.findByDocumentIdentification(documentIdentification)
+                .map(entity -> mapper.map(entity, User.class))
+                .doOnSuccess(u -> {
+                    if (u != null) {
+                        log.trace("Usuario encontrado con identificacion {}: {}", documentIdentification, u);
+                    } else {
+                        log.trace("No se encontró usuario con identificacion: {}", documentIdentification);
+                    }
+                })
+                .doOnError(e -> log.error("Error al buscar usuario por identificacion {}: {}", documentIdentification, e.getMessage(), e));
 
     }
 }
