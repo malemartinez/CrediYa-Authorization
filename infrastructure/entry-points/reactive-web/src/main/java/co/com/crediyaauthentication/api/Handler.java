@@ -4,12 +4,14 @@ import co.com.crediyaauthentication.api.dto.UserDto;
 import co.com.crediyaauthentication.api.mapper.UserMapper;
 import co.com.crediyaauthentication.model.user.gateways.UserCasePort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class Handler {
@@ -30,6 +32,7 @@ public class Handler {
         String documentNumber = serverRequest.pathVariable("documentNumber");
 
         return useCase.getUserByDocument(documentNumber)
+                .doOnNext(u -> log.info("[UserHandler] Recibida petición de búsqueda de usuario, userDocument={}", documentNumber))
                 .map(userMapper::toResponse)
                 .flatMap(userResponse ->
                         ServerResponse.ok()

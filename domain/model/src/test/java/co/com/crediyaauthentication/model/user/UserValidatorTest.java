@@ -1,6 +1,6 @@
 package co.com.crediyaauthentication.model.user;
 
-import co.com.crediyaauthentication.model.user.Exceptions.ValidationException;
+import co.com.crediyaauthentication.model.Exceptions.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

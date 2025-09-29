@@ -7,6 +7,8 @@ spring:
     add-properties: false
   profiles:
     include: null
+  config:
+    import: optional:file:.env[.properties]
 management:
   endpoints:
     web:
@@ -31,4 +33,12 @@ logging:
   level:
     root: INFO
     co.com.crediyaauthentication: TRACE
-    org.springframework.r2dbc: DEBUG
+#    org.springframework.r2dbc: DEBUG
+    org.springframework.security.web: DEBUG
+    web: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId}] %-5level %logger{36} - %msg%n"
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  expiration-time: ${EXPIRATION_TIME}

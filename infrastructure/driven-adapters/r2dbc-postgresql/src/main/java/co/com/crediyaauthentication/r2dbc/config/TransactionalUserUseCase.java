@@ -1,5 +1,7 @@
 package co.com.crediyaauthentication.r2dbc.config;
 
+import co.com.crediyaauthentication.model.auth.LogIn;
+import co.com.crediyaauthentication.model.auth.Token;
 import co.com.crediyaauthentication.model.user.User;
 import co.com.crediyaauthentication.model.user.gateways.UserCasePort;
 import lombok.RequiredArgsConstructor;
@@ -22,4 +24,10 @@ public class TransactionalUserUseCase implements UserCasePort {
         return delegate.getUserByDocument(documentNumber)
                 .as(operator::transactional);
     }
+
+//    @Override
+//    public Mono<Token> logIn(LogIn logIn) {
+//        return delegate.logIn(logIn)
+//                .as(operator::transactional);
+//    }
 }

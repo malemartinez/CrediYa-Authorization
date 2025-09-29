@@ -1,6 +1,7 @@
 package co.com.crediyaauthentication.model.user;
 
-import co.com.crediyaauthentication.model.user.Exceptions.ValidationException;
+import co.com.crediyaauthentication.model.Exceptions.ValidationException;
+import co.com.crediyaauthentication.model.role.Role;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class UserValidator {
         validateLastname(user.getLastname(), errors);
         validateSalary(user.getBaseSalary(), errors);
         validateEmail(user.getEmail(), errors);
+        validateRoles(user.getRoles(),errors);
 
         if (!errors.isEmpty()) {
             throw new ValidationException(errors);
@@ -50,6 +52,12 @@ public class UserValidator {
             errors.add("El correo no puede estar vacío");
         } else if (!EMAIL_REGEX.matcher(value).matches()) {
             errors.add("Formato de correo inválido");
+        }
+    }
+
+    private void validateRoles(Set<Role> roles, Set<String> errors){
+        if (roles == null || roles.isEmpty()) {
+            errors.add("Debe asignarse al menos un rol");
         }
     }
 }
