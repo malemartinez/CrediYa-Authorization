@@ -7,6 +7,8 @@ spring:
     add-properties: false
   profiles:
     include: null
+  config:
+    import: optional:file:.env[.properties]
 management:
   endpoints:
     web:
@@ -38,5 +40,5 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId}] %-5level %logger{36} - %msg%n"
 
 jwt:
-  secret-key: 710a189e7de25e8e8035dcf7dc54e086a169700068965fd03f4b0a1b8b048f5d
-  expiration-time: 300000
+  secret-key: ${JWT_SECRET_KEY}
+  expiration-time: ${EXPIRATION_TIME}
