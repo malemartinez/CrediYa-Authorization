@@ -40,6 +40,12 @@ public class SecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/webjars/**"
+                        ).permitAll()
                         .pathMatchers("/api/v1/auth/**").permitAll()
                         .pathMatchers(HttpMethod.POST,"/api/v1/usuarios").hasAnyRole("ADMIN", "ASSESSOR")
                         .anyExchange().authenticated()
