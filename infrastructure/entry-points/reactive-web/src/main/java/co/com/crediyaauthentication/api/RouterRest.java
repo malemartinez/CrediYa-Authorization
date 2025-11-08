@@ -1,6 +1,9 @@
 package co.com.crediyaauthentication.api;
 
+import co.com.crediyaauthentication.api.auth.TokenResponse;
 import co.com.crediyaauthentication.api.dto.UserDto;
+import co.com.crediyaauthentication.api.dto.UserResponseDto;
+import co.com.crediyaauthentication.api.error.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -43,8 +46,22 @@ public class RouterRest {
                                     )
                             ),
                             responses = {
-                                    @ApiResponse(responseCode = "200", description = "Usuario creado"),
-                                    @ApiResponse(responseCode = "400", description = "Error de validación")
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "Usuario creado",
+                                            content = @Content(
+                                                    mediaType = "application/json",
+                                                    schema = @Schema(implementation = UserResponseDto.class)
+                                            )
+                                    ),
+                                    @ApiResponse(
+                                            responseCode = "400",
+                                            description = "Error de validación",
+                                            content = @Content(
+                                                    mediaType = "application/json",
+                                                    schema = @Schema(implementation = ApiErrorResponse.class)
+                                            )
+                                    )
                             }
                     )
             ),
